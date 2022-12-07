@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for c in categories %}
+    {% if not c.parent %}
+<p><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></p>
+    {% endif %}
+{% endfor %}
+{% for c in child_categories %}
+    {% if not c.is_leaf_node %}
+    <p><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></p>
+        {% else %}
+    <p>Все тесты в категории {{ c.name }}</p>
+        <a href="{{ c.get_quizs_by_category }}">Начать тестирование</a>
+    {% endif %}
+{% endfor %}
+</body>
+</html>

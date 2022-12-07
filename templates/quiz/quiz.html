@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>{{ question.question }}</h2>
+<form>
+    <input type="checkbox" value="A" name="answers">
+    <label>{{ question.answer_a }}</label>
+    <input type="checkbox" value="B" name="answers">
+    <label>{{ question.answer_b }}</label>
+    <input type="checkbox" value="C" name="answers">
+    <label>{{ question.answer_c }}</label>
+    <input type="checkbox" value="D" name="answers">
+    <label>{{ question.answer_d }}</label>
+    <input type="hidden" value="{{ question_num }}" name="question_num">
+    <input type="submit">
+</form>
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for q in quizs %}
+{{ q }}
+    <a href="{{ q.get_absolute_url }}">Выбрать тест</a>
+{% endfor %}
+</body>
+</html>

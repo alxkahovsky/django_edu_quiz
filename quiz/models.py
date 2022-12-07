@@ -2,6 +2,7 @@ from django.db import models
 from multiselectfield import MultiSelectField
 from mptt.models import MPTTModel, TreeForeignKey, TreeManyToManyField
 from django.utils import timezone
+from django.urls import reverse
 
 
 class UpdatedCreatedActive(models.Model):
@@ -22,6 +23,12 @@ class QuizCategory(MPTTModel, UpdatedCreatedActive):
     def __str__(self):
         return f'Категория {self.name}'
 
+    def get_absolute_url(self):
+        return reverse('quiz:category_quiz_list_by_category', args=[self.slug])
+
+    def get_quizs_by_category(self):
+        return reverse('quiz:quiz_by_category', args=[self.slug])
+
 
 class Quiz(UpdatedCreatedActive):
     name = models.CharField(max_length=200, verbose_name='Название теста')
@@ -33,21 +40,31 @@ class Quiz(UpdatedCreatedActive):
     def __str__(self):
         return f'{self.name}'
 
+    def get_answers_map(self):
+        questions = Question.objects.filter(quiz=self)
+        result = []
+        for q in questions:
+            result.append(q.correct_answer)
+        return result
+
+    def get_absolute_url(self):
+        return reverse('quiz:quiz_detail', args=[self.slug])
+
 
 class AnswerChoises(models.TextChoices):
-    ANSWER_A = 'A', 'Вариант A',
-    ANSWER_B = 'B', 'Вариант B',
-    ANSWER_C = 'C', 'Вариант C',
-    ANSWER_D = 'D', 'Вариант D',
+    ANSWER_A = 'A', 'answer_a',
+    ANSWER_B = 'B', 'answer_b',
+    ANSWER_C = 'C', 'answer_c',
+    ANSWER_D = 'D', 'answer_d',
 
 
 class Question(UpdatedCreatedActive):
     question = models.CharField(max_length=200, verbose_name='Вопрос')
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, blank=True, null=True)
-    answer_a = models.CharField(max_length=200, verbose_name='Вариант ответа A', default='')
-    answer_b = models.CharField(max_length=200, verbose_name='Вариант ответа B', default='')
-    answer_c = models.CharField(max_length=200, verbose_name='Вариант ответа C', default='')
-    answer_d = models.CharField(max_length=200, verbose_name='Вариант ответа D', default='')
+    answer_a = models.CharField(max_length=200, verbose_name='Вариант A', default='')
+    answer_b = models.CharField(max_length=200, verbose_name='Вариант B', default='')
+    answer_c = models.CharField(max_length=200, verbose_name='Вариант C', default='')
+    answer_d = models.CharField(max_length=200, verbose_name='Вариант D', default='')
     correct_answer = MultiSelectField(choices=AnswerChoises.choices, max_length=8, verbose_name='Правильные варианты')
 
 
