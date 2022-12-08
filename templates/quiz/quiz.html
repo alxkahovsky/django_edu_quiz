@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Тестирование{% endblock title %}
+
+{% block content %}
 <h2>{{ question.question }}</h2>
 <form>
     <input type="checkbox" value="A" name="answers">
@@ -18,5 +15,4 @@
     <input type="hidden" value="{{ question_num }}" name="question_num">
     <input type="submit">
 </form>
-</body>
-</html>
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Вход{% endblock title %}
+
+{% block content %}
+<!-- login -->
+{% if user.is_authenticated %}
+<p>already</p>
+{% else %}
+<section class="login_area p_100">
+    <div class="container">
+        <div class="login_inner">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="login_title">
+                        <h2>Авторизация</h2>
+                        {% if form.errors %}
+                            <p class="alert-danger" >Ваш пароль или имя пользователя не совпадают</p>
+                            {% else %}
+                            <p>Поля для входа в свою учетную запись:</p>
+                        {% endif %}
+                    </div>
+                    <form action="." method="post" class="login_form row">{% csrf_token %}
+                        <div class="col-lg-4 form-group">
+                            <input required type="text" class="form-control"
+                                   name="{{ form.username.name }}"
+                                   placeholder="Ваш логин">
+                        </div>
+                        <div class="col-lg-4 form-group">
+                            <input required type="password" class="form-control"
+                                   name="{{ form.password.name }}"
+                                   placeholder="Пароль">
+                        </div>
+                        <div class="col-lg-2 form-group">
+                            <input type="hidden" name="next" value="{{ next }}" />
+                            <button type="submit" value="submit" class="btn subs_btn form-control btn-success">Войти</button>
+                        </div>
+                        <div class="col-lg-12 form-group centered">
+                            <div class="creat_account">
+                                <input type="checkbox" id="f-option" name="selector">
+                                <label for="f-option">Оставаться в системе</label>
+                                <div class="check"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock content %}

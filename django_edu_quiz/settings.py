@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'quiz',
     'multiselectfield',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [

@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from .models import Quiz, Question, QuizCategory
-from .quiz_process import QuizEvent
+from .quiz_process import QuizEvent, QuizSetProcess
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def category_list(request, category_slug=None):
     child_categories = None
     categories = None
@@ -19,16 +21,21 @@ def category_list(request, category_slug=None):
     return render(request, 'quiz/quiz_list.html', context)
 
 
+@login_required
 def quiz_by_category(request, category_slug):
     category = QuizCategory.objects.get(slug=category_slug)
-    quizs = Quiz.objects.filter(category=category)
+    quizs = Quiz.objects.filter(category=category).order_by('id')
+    process_quiz = QuizSetProcess(request)
+    # process_quiz.clear()
     context = {
         'quizs': quizs,
         'category': category,
+        'process_quiz': process_quiz.quiz_set,
     }
     return render(request, 'quiz/quiz_by_category.html', context)
 
 
+@login_required
 def quiz_detail(request, quiz_slug):
     quiz = get_object_or_404(Quiz, slug=quiz_slug)
     quiz_questions = Question.objects.select_related('quiz').filter(quiz=quiz)
@@ -43,15 +50,21 @@ def quiz_detail(request, quiz_slug):
             return HttpResponse('Вы нарушили порядок прохождения теста, начните сначала')
         event.add(quiz_context[question_num], query['answers'])
         if question_num == len(quiz_context):
-            correct_counter = 0
-            incorrect_counter = 0
-            for a, ca in zip(event.quiz_event['answers'], quiz.get_answers_map()):
-                if a == ca:
-                    correct_counter += 1
-                else:
-                    incorrect_counter += 1
+            process_quiz = QuizSetProcess(request)
+            a = event.quiz_event['answers']
+            r = quiz.check_user_result(a)
+            process_quiz.add(quiz, True, r)
+            process_quiz.add()
+            # correct_counter = 0
+            # incorrect_counter = 0
+            # for a, ca in zip(event.quiz_event['answers'], quiz.get_answers_map()):
+            #     if a == ca:
+            #         correct_counter += 1
+            #     else:
+            #         incorrect_counter += 1
             event.clear()
-            return HttpResponse(f'Грац, павильных ответов {correct_counter}, неправильных ответов {incorrect_counter}')
+            # return HttpResponse(f'Грац, павильных ответов {correct_counter}, неправильных ответов {incorrect_counter}')
+            return redirect('quiz:quiz_by_category', quiz.category.last().slug)
         question_num += 1
         return render(request, 'quiz/quiz.html', {'question': quiz_context[question_num],
                                                   'question_num': question_num})

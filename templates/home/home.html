@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Cлучайное число для {{ username }}{% endblock title %}
+
+{% block content %}
+<section>
+    <div class="container">
+        <div>
+            {% if not login %}
+            <h3 id>Необходимо авторизоваться!</h3>
+            <a href="{% url 'accounts:login' %}">Вход</a>
+            <a href="{% url 'accounts:register' %}">Регистрация</a> <br/>
+            {% else %}
+            <h2 id="username" style="display: inline">Привет {{ username }}</h2>
+                <a href="{% url 'quiz:catogory_quiz_list' %}">Тесты</a>
+            <div>
+                <a href="{% url 'accounts:logout' %}">Выход</a> <br/>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

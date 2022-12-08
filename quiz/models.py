@@ -50,6 +50,22 @@ class Quiz(UpdatedCreatedActive):
     def get_absolute_url(self):
         return reverse('quiz:quiz_detail', args=[self.slug])
 
+    def check_user_result(self, user_answer_map):
+        print(user_answer_map)
+        correct_answers = self.get_answers_map()
+        print(correct_answers)
+        correct_count = 0
+        incorrect_count = 0
+        for correct_answer, user_answer in zip(correct_answers, user_answer_map):
+            if correct_answer == user_answer:
+                correct_count += 1
+            else:
+                incorrect_count += 1
+        correct_percent = correct_count / len(correct_answers) * 100
+        return {'correct': correct_count, 'incorrect': incorrect_count,
+                'persent': correct_percent, 'total': len(correct_answers),
+                'correct_answer_map': correct_answers, 'user_answer_map': user_answer_map}
+
 
 class AnswerChoises(models.TextChoices):
     ANSWER_A = 'A', 'answer_a',

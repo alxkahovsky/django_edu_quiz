@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация{% endblock title %}
+
+{% block content %}
+<!-- registration -->
+<section class="login_area">
+    <div class="container">
+        <div class="login_inner">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="login_title">
+                        <h2>Регистрация</h2>
+                    </div>
+                    <form class="login_form row" action="." method="post">{% csrf_token %}
+                        <div class="col-lg-6 form-group">
+                            <input required type="text" class="form-control"
+                                   placeholder="Логин"
+                                   name="{{ user_form.username.name }}">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <input required type="text" class="form-control"
+                                   placeholder="Ваше имя"
+                                   name="{{ user_form.first_name.name }}">
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <input required type="password" class="form-control"
+                                   placeholder="Пароль"
+                                   name="{{ user_form.password.name }}">
+                        </div>
+                        <div class="col-lg-3 form-group">
+                            <input required type="password" class="form-control"
+                                   placeholder="Повторите пароль"
+                                   name="{{ user_form.password2.name }}">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <button type="submit" value="submit"
+                                    class="btn subs_btn form-control btn-success">Зарегистрироваться
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

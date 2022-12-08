@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Регистрация завершена{% endblock title %}
+
+{% block content %}
+<!-- register done -->
+<section>
+    <div class="container">
+        <div>
+            <h3> {{ new_user }} регистрация аккаунта прошла успешно</h3>
+            <h4>теперь Вы в него можете <a href="{% url 'accounts:login' %}">зайти</a></h4>
+        </div>
+    </div>
+</section>
+{% endblock %}
