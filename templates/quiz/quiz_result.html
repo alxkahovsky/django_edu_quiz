@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Результаты теста{% endblock title %}
+
+{% block content %}
+    <h1>{{ user }} вы завершили тестирование по набору {{ category.name }}</h1>
+    <h2>Ваши результары:</h2>
+    {% for q,r in quiz_results %}
+        <h4>{{ q.name }} из {{ r.total }} вопросов</h4>
+        <p>--- Верных ответов: {{ r.correct }}</p>
+        <p>--- Неверных ответов: {{ r.incorrect }}</p>
+        <p>--- Процент верных ответов {{ r.persent }}</p>
+    {% endfor %}
+    <a href="{% url 'home' %}">Вернуться на главную</a>
+{% endblock content %}

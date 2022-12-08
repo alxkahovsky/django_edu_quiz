@@ -4,15 +4,14 @@
 {% block content %}
 {% for c in categories %}
     {% if not c.parent %}
-<p><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></p>
+<p><a href="{{ c.get_absolute_url }}">В категорию {{ c.name }}</a></p>
     {% endif %}
 {% endfor %}
 {% for c in child_categories %}
     {% if not c.is_leaf_node %}
-    <p><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></p>
+    <p><a href="{{ c.get_absolute_url }}">В категорию {{ c.name }}</a></p>
         {% else %}
-    <p>Все тесты в категории {{ c.name }}</p>
-        <a href="{{ c.get_quizs_by_category }}">Начать тестирование</a>
+    <p><a href="{{ c.get_quizs_by_category }}"> Пройти набор тестов по категории {{ c.name }}</a></p>
     {% endif %}
 {% endfor %}
 {% endblock content %}

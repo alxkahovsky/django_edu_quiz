@@ -3,8 +3,6 @@
 
 {% block content %}
 <h2>{{ process_quiz }}</h2>
-{% for q in quizs %}
-{{ q }}
-    <a href="{{ q.get_absolute_url }}">Выбрать тест</a>
-{% endfor %}
+{{ quiz }}
+    <a href="{{ quiz.get_absolute_url }}">Начать тестирование</a>
 {% endblock content %}

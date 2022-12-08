@@ -24,15 +24,34 @@ def category_list(request, category_slug=None):
 @login_required
 def quiz_by_category(request, category_slug):
     category = QuizCategory.objects.get(slug=category_slug)
-    quizs = Quiz.objects.filter(category=category).order_by('id')
+    quizs = list(Quiz.objects.filter(category=category).order_by('id'))
     process_quiz = QuizSetProcess(request)
-    # process_quiz.clear()
+    if process_quiz.quiz_set['quizs'] == []:
+        context = {
+            'quiz': quizs[0],
+            'category': category,
+            'process_quiz': process_quiz.quiz_set,
+        }
+        return render(request, 'quiz/quiz_by_category.html', context)
+    else:
+        last_passed_quiz = Quiz.objects.get(id=process_quiz.quiz_set['quizs'][-1])
+        if quizs.index(last_passed_quiz) != len(quizs) - 1:
+            next_quiz_index = quizs.index(last_passed_quiz) + 1
+            context = {
+                'quiz': quizs[next_quiz_index],
+                'category': category,
+                'process_quiz': process_quiz.quiz_set,
+            }
+            return render(request, 'quiz/quiz_by_category.html', context)
+    user = request.user
+    quiz_results = zip(quizs, process_quiz.quiz_set['quiz_result'])
     context = {
-        'quizs': quizs,
+        'user': user,
         'category': category,
-        'process_quiz': process_quiz.quiz_set,
+        'quiz_results': quiz_results,
     }
-    return render(request, 'quiz/quiz_by_category.html', context)
+    process_quiz.clear()
+    return render(request, 'quiz/quiz_result.html', context)
 
 
 @login_required
@@ -54,16 +73,7 @@ def quiz_detail(request, quiz_slug):
             a = event.quiz_event['answers']
             r = quiz.check_user_result(a)
             process_quiz.add(quiz, True, r)
-            process_quiz.add()
-            # correct_counter = 0
-            # incorrect_counter = 0
-            # for a, ca in zip(event.quiz_event['answers'], quiz.get_answers_map()):
-            #     if a == ca:
-            #         correct_counter += 1
-            #     else:
-            #         incorrect_counter += 1
             event.clear()
-            # return HttpResponse(f'Грац, павильных ответов {correct_counter}, неправильных ответов {incorrect_counter}')
             return redirect('quiz:quiz_by_category', quiz.category.last().slug)
         question_num += 1
         return render(request, 'quiz/quiz.html', {'question': quiz_context[question_num],
