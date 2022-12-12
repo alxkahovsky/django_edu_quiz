@@ -26,6 +26,7 @@ def quiz_by_category(request, category_slug):
     category = QuizCategory.objects.get(slug=category_slug)
     quizs = list(Quiz.objects.filter(category=category).order_by('id'))
     process_quiz = QuizSetProcess(request)
+    # Проверяем именно на логическое равенство == а не на идентичность
     if process_quiz.quiz_set['quizs'] == []:
         context = {
             'quiz': quizs[0],

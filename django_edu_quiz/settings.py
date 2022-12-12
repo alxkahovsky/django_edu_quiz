@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'django_edu_quiz.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'prod_db.sqlite3',
     }
 }
 
@@ -127,3 +127,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 QUIZ_EVENT_SESSION_ID = 'quiz_event'
 QUIZ_SET_SESSION_ID = 'quiz_session'
+
+try:
+    from .settings_local import *
+except Exception as e:
+    print(e)
+    pass

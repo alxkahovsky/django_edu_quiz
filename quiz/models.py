@@ -45,6 +45,7 @@ class Quiz(UpdatedCreatedActive):
         return f'{self.name}'
 
     def get_answers_map(self):
+        """Возвращает карту правильных ответов на тест"""
         questions = Question.objects.filter(quiz=self)
         result = []
         for q in questions:
@@ -55,6 +56,7 @@ class Quiz(UpdatedCreatedActive):
         return reverse('quiz:quiz_detail', args=[self.slug])
 
     def check_user_result(self, user_answer_map):
+        """Возвращает результат прохождения теста"""
         correct_answers = self.get_answers_map()
         correct_count = 0
         incorrect_count = 0
@@ -87,7 +89,7 @@ class Question(UpdatedCreatedActive):
     answer_b = models.CharField(max_length=200, verbose_name='Вариант B', default='')
     answer_c = models.CharField(max_length=200, verbose_name='Вариант C', default='')
     answer_d = models.CharField(max_length=200, verbose_name='Вариант D', default='')
-    correct_answer = MultiSelectField(choices=AnswerChoises.choices, max_length=8, verbose_name='Правильные варианты')
+    correct_answer = MultiSelectField(choices=AnswerChoises.choices, max_length=6, verbose_name='Правильные варианты')
 
     def __str__(self):
         return f'Вопрос №{self.id}'
