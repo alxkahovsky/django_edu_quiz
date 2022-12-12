@@ -29,6 +29,10 @@ class QuizCategory(MPTTModel, UpdatedCreatedActive):
     def get_quizs_by_category(self):
         return reverse('quiz:quiz_by_category', args=[self.slug])
 
+    class Meta:
+        verbose_name = 'Набор тестов'
+        verbose_name_plural = 'Наборы тестов'
+
 
 class Quiz(UpdatedCreatedActive):
     name = models.CharField(max_length=200, verbose_name='Название теста')
@@ -51,9 +55,7 @@ class Quiz(UpdatedCreatedActive):
         return reverse('quiz:quiz_detail', args=[self.slug])
 
     def check_user_result(self, user_answer_map):
-        print(user_answer_map)
         correct_answers = self.get_answers_map()
-        print(correct_answers)
         correct_count = 0
         incorrect_count = 0
         for correct_answer, user_answer in zip(correct_answers, user_answer_map):
@@ -65,6 +67,10 @@ class Quiz(UpdatedCreatedActive):
         return {'correct': correct_count, 'incorrect': incorrect_count,
                 'persent': correct_percent, 'total': len(correct_answers),
                 'correct_answer_map': correct_answers, 'user_answer_map': user_answer_map}
+
+    class Meta:
+        verbose_name = 'Тест'
+        verbose_name_plural = 'Тесты'
 
 
 class AnswerChoises(models.TextChoices):
@@ -83,7 +89,10 @@ class Question(UpdatedCreatedActive):
     answer_d = models.CharField(max_length=200, verbose_name='Вариант D', default='')
     correct_answer = MultiSelectField(choices=AnswerChoises.choices, max_length=8, verbose_name='Правильные варианты')
 
-
     def __str__(self):
         return f'Вопрос №{self.id}'
+
+    class Meta:
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
 
