@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'quiz',
     'multiselectfield',
     'accounts.apps.AccountsConfig',
+    'django_edu_quiz',
 ]
 
 MIDDLEWARE = [
