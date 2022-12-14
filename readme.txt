@@ -46,6 +46,23 @@ syncdb или миграции через South (будет плюсом).
 1.Клонируем текущий репозиторий;
 2.Создаем виртуальное окружение (python 3.10) и активируем и устанавливаем зависимости;
 3.Создаем файл настроек settings_local.py вручную или при помощи команды "python manage.py createlocaldb";
-4.Репозиторий содержит файлы миграций, требования к миграциям, указанные в ТЗ, явно устарели, поэтому делаем "python manage.py makemigrations", далее "python manage.py 5.migrate". Убедитесь что все миграции установлены "python manage.py showmigrations"
-6.Создайте учетную запись администратора "python manage.py createsuperuser"
-7.Запустите сервер разработки "python manage.py runserver"
+4.Репозиторий содержит файлы миграций, требования к миграциям, указанные в ТЗ, явно устарели, поэтому делаем "python manage.py makemigrations", далее "python manage.py migrate". Убедитесь что все миграции установлены "python manage.py showmigrations";
+6.Создайте учетную запись администратора "python manage.py createsuperuser";
+7.Запустите сервер разработки "python manage.py runserver";
+
+пример файла settings_local.py:
+
+from pathlib import Path
+
+
+DEBUG = True
+ALLOWED_HOSTS = ['*']
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'your_db_name.sqlite3',
+    }
+}
